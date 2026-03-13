@@ -36,7 +36,7 @@ It uses the `uv` package manager to automatically fetch dependencies and run the
 }
 ```
 
-*Note: Replace `/absolute/path/to/hidratespark-mcp` with the actual path to this folder (e.g., `/Users/maximeperron/Documents/Antigravity/hidratespark-mcp/mcp_server.py`), and replace the URL with your production PWA URL. If testing locally, you can use `http://localhost:3000/api`.*
+*Note: Replace `/absolute/path/to/hidratespark-mcp` with the actual path to this folder (e.g., `/home/user/Projects/hidratespark-mcp/mcp_server.py`), and replace the URL with your production PWA URL. If testing locally, you can use `http://localhost:3000/api`.*
 
 ## Available Tools
 
