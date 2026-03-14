@@ -1,0 +1,14 @@
+[project]
+name = "hidratespark-mcp"
+version = "0.1.0"
+description = "A Model Context Protocol (MCP) server for HidrateSpark PWA"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastmcp",
+    "requests",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
