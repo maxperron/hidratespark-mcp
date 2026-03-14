@@ -1,10 +1,12 @@
 # /// script
 # requires-python = ">=3.10"
-# dependencies = ["fastmcp", "requests"]
+# dependencies = ["fastmcp"]
 # ///
 
 import os
-import requests
+import json
+import urllib.request
+import urllib.error
 from fastmcp import FastMCP
 
 # Initialize FastMCP Server
@@ -22,13 +24,25 @@ def get_headers():
         "Content-Type": "application/json"
     }
 
+def make_request(url, method="GET", data=None):
+    headers = get_headers()
+    req_data = json.dumps(data).encode('utf-8') if data else None
+    req = urllib.request.Request(url, data=req_data, headers=headers, method=method)
+    
+    try:
+        with urllib.request.urlopen(req) as response:
+            return response.read().decode('utf-8')
+    except urllib.error.HTTPError as e:
+        error_body = e.read().decode('utf-8')
+        raise RuntimeError(f"HTTP {e.code}: {error_body}")
+    except urllib.error.URLError as e:
+        raise RuntimeError(f"Network error: {e.reason}")
+
 @mcp.tool()
 def get_daily_goal(date: str) -> str:
     """Get the hydration goal for a specific date (YYYY-MM-DD)."""
     try:
-        response = requests.get(f"{API_URL}/goal?date={date}", headers=get_headers())
-        response.raise_for_status()
-        return response.text
+        return make_request(f"{API_URL}/goal?date={date}", method="GET")
     except Exception as e:
         return f"Error fetching daily goal: {e}"
 
@@ -37,9 +51,7 @@ def update_daily_goal(date: str, goal: int) -> str:
     """Update the hydration goal (in ml) for a specific date (YYYY-MM-DD)."""
     try:
         payload = {"date": date, "goal": goal}
-        response = requests.post(f"{API_URL}/goal", json=payload, headers=get_headers())
-        response.raise_for_status()
-        return response.text
+        return make_request(f"{API_URL}/goal", method="POST", data=payload)
     except Exception as e:
         return f"Error updating daily goal: {e}"
 
@@ -55,9 +67,7 @@ def get_hydration_history(start_date: str, end_date: str = None, timezone_offset
         if not end_date:
             end_date = start_date
         url = f"{API_URL}/get-history?start_date={start_date}&end_date={end_date}&timezone_offset={timezone_offset}"
-        response = requests.get(url, headers=get_headers())
-        response.raise_for_status()
-        return response.text
+        return make_request(url, method="GET")
     except Exception as e:
         return f"Error fetching hydration history: {e}"
 
