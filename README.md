@@ -15,8 +15,14 @@ It uses the `uv` package manager to automatically fetch dependencies and run the
 
 ## Using with Gemini CLI
 
-1. Open (or create) your Gemini CLI MCP configuration file at `~/.gemini/mcp.json`.
-2. Add the `hidratespark` server configuration to the `mcpServers` object:
+To use this with the Gemini CLI natively on your Mac, it's recommended to clone the repository so that Gemini can run the project via `uv` using the `pyproject.toml`.
+
+1. Clone the repository to your machine:
+   ```bash
+   git clone https://github.com/maxperron/hidratespark-mcp.git ~/Projects/hidratespark-mcp
+   ```
+2. Open (or create) your Gemini CLI MCP configuration file at `~/.gemini/mcp.json`.
+3. Add the `hidratespark` server configuration to the `mcpServers` object:
 
 ```json
 {
@@ -24,8 +30,10 @@ It uses the `uv` package manager to automatically fetch dependencies and run the
     "hidratespark": {
       "command": "uv",
       "args": [
+        "--directory",
+        "/home/user/Projects/hidratespark-mcp",
         "run",
-        "/absolute/path/to/hidratespark-mcp/mcp_server.py"
+        "mcp_server.py"
       ],
       "env": {
         "HIDRATESPARK_API_KEY": "your-api-key-here",
